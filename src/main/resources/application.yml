@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:h2:mem:reactive-programming-g-challenge
+    url: r2dbc:h2:mem:///reactive-programming-g-challenge;TIME ZONE='-5:00'
     driver-class-name: org.h2.Driver
   jpa:
     database: h2
@@ -9,6 +9,10 @@ spring:
   h2:
     console:
       enabled: true
+  data:
+    r2dbc:
+      repositories:
+        enabled: true
 server:
   servlet:
     context-path: /g/challenges/reactive-programming

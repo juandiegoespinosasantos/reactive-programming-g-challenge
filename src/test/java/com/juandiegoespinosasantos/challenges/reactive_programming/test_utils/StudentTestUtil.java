@@ -14,7 +14,7 @@ public final class StudentTestUtil {
     }
 
     public static Student getEntityWithAllAttrs() {
-        java.sql.Timestamp now = new java.sql.Timestamp(System.currentTimeMillis());
+        java.time.Instant now = java.time.Instant.now();
 
         return Student.builder()
                 .id(1_000)

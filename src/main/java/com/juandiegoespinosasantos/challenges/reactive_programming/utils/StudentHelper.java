@@ -14,11 +14,11 @@ public final class StudentHelper {
     }
 
     public static StudentDTO buildDTO(final Student entity) {
-        java.sql.Timestamp createdAt = entity.getCreatedAt();
-        long ca = (createdAt == null) ? 0L : createdAt.getTime();
+        java.time.Instant createdAt = entity.getCreatedAt();
+        long ca = (createdAt == null) ? 0L : createdAt.getEpochSecond();
 
-        java.sql.Timestamp latestUpdate = entity.getLatestUpdate();
-        long lu = (latestUpdate == null) ? 0L : latestUpdate.getTime();
+        java.time.Instant latestUpdate = entity.getLatestUpdate();
+        long lu = (latestUpdate == null) ? 0L : latestUpdate.getEpochSecond();
 
         return new StudentDTO(entity.getId(),
                 entity.getNames(),
@@ -38,8 +38,8 @@ public final class StudentHelper {
                 .email(dto.email())
                 .phoneNumber(dto.phoneNumber())
                 .active(dto.active())
-                .createdAt(new java.sql.Timestamp(dto.createdAt()))
-                .latestUpdate(new java.sql.Timestamp(dto.latestUpdate()))
+                .createdAt(java.time.Instant.ofEpochSecond(dto.createdAt()))
+                .latestUpdate(java.time.Instant.ofEpochSecond(dto.latestUpdate()))
                 .build();
     }
 }

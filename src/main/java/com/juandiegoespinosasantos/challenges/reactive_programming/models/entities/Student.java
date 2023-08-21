@@ -1,13 +1,13 @@
 package com.juandiegoespinosasantos.challenges.reactive_programming.models.entities;
 
 import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.GenerationType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.Id;
 
 import java.io.Serializable;
 
@@ -20,11 +20,10 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Entity
 public class Student implements Serializable {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Integer id;
 
@@ -44,8 +43,8 @@ public class Student implements Serializable {
     private boolean active;
 
     @Column(name = "created_at")
-    private java.sql.Timestamp createdAt;
+    private java.time.Instant createdAt;
 
     @Column(name = "latest_update")
-    private java.sql.Timestamp latestUpdate;
+    private java.time.Instant latestUpdate;
 }

@@ -1,21 +1,22 @@
 package com.juandiegoespinosasantos.challenges.reactive_programming.controllers;
 
-import com.juandiegoespinosasantos.challenges.reactive_programming.dtos.ResponseDTO;
 import com.juandiegoespinosasantos.challenges.reactive_programming.dtos.StudentDTO;
 import com.juandiegoespinosasantos.challenges.reactive_programming.models.entities.Student;
 import com.juandiegoespinosasantos.challenges.reactive_programming.services.IStudentService;
 import com.juandiegoespinosasantos.challenges.reactive_programming.utils.StudentHelper;
-import io.reactivex.rxjava3.core.Single;
-import io.reactivex.rxjava3.schedulers.Schedulers;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 /**
  * @author juandiegoespinosasantos@gmail.com
@@ -34,17 +35,37 @@ public class StudentController {
         this.service = service;
     }
 
-    @PostMapping(path = "", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public Single<ResponseEntity<ResponseDTO>> create(@RequestBody StudentDTO requestBody) {
+    @PostMapping(path = "", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public Mono<StudentDTO> create(@RequestBody StudentDTO requestBody) {
         Student entity = StudentHelper.buildEntity(requestBody);
 
         return service.create(entity)
-                .subscribeOn(Schedulers.io())
-                .map(single -> {
-                    StudentDTO payload = StudentHelper.buildDTO(single);
+                .map(StudentHelper::buildDTO);
+    }
 
-                    return ResponseEntity.status(HttpStatus.CREATED)
-                            .body(new ResponseDTO("Estudiante creado exitosamente", payload));
-                });
+    @PutMapping(path = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public Mono<StudentDTO> edit(@PathVariable("id") Integer id,
+                                 @RequestBody StudentDTO requestBody) {
+        Student entity = StudentHelper.buildEntity(requestBody);
+
+        return service.edit(id, entity)
+                .map(StudentHelper::buildDTO);
+    }
+
+    @GetMapping(path = "/{id}")
+    public Mono<StudentDTO> findById(@PathVariable("id") Integer id) {
+        return service.findById(id)
+                .map(StudentHelper::buildDTO);
+    }
+
+    @GetMapping(path = "")
+    public Flux<StudentDTO> findActives() {
+        return service.findActives()
+                .map(StudentHelper::buildDTO);
+    }
+
+    @DeleteMapping(path = "/{id}")
+    public Mono<Void> delete(@PathVariable("id") Integer id) {
+        return service.delete(id);
     }
 }

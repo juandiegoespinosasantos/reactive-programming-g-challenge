@@ -5,7 +5,7 @@ package com.juandiegoespinosasantos.challenges.reactive_programming.dtos;
  * @version Aug 19, 2023
  * @since 17
  */
-public record StudentDTO(int id,
+public record StudentDTO(Integer id,
                          String names,
                          String surnames,
                          String email,

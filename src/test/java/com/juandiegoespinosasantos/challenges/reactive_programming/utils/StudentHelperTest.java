@@ -20,8 +20,8 @@ class StudentHelperTest {
         Assertions.assertEquals(entity.getEmail(), dto.email());
         Assertions.assertEquals(entity.getPhoneNumber(), dto.phoneNumber());
         Assertions.assertEquals(entity.isActive(), dto.active());
-        Assertions.assertEquals(entity.getCreatedAt().getTime(), dto.createdAt());
-        Assertions.assertEquals(entity.getLatestUpdate().getTime(), dto.latestUpdate());
+        Assertions.assertEquals(entity.getCreatedAt().toEpochMilli(), dto.createdAt());
+        Assertions.assertEquals(entity.getLatestUpdate().toEpochMilli(), dto.latestUpdate());
     }
 
     @Test
@@ -36,7 +36,7 @@ class StudentHelperTest {
         Assertions.assertEquals(dto.email(), entity.getEmail());
         Assertions.assertEquals(dto.phoneNumber(), entity.getPhoneNumber());
         Assertions.assertEquals(dto.active(), entity.isActive());
-        Assertions.assertEquals(dto.createdAt(), entity.getCreatedAt().getTime());
-        Assertions.assertEquals(dto.latestUpdate(), entity.getLatestUpdate().getTime());
+        Assertions.assertEquals(dto.createdAt(), entity.getCreatedAt().toEpochMilli());
+        Assertions.assertEquals(dto.latestUpdate(), entity.getLatestUpdate().toEpochMilli());
     }
 }
