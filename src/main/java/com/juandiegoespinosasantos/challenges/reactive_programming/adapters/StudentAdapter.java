@@ -8,6 +8,8 @@ import io.reactivex.rxjava3.core.Single;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
+
 /**
  * @author juandiegoespinosasantos@gmail.com
  * @version Aug 22, 2023
@@ -36,6 +38,27 @@ public class StudentAdapter {
             try {
                 Student created = service.create(student);
                 StudentDTO dto = StudentHelper.buildDTO(created);
+                source.onSuccess(dto);
+            } catch (Exception ex) {
+                source.onError(ex);
+            }
+        });
+    }
+
+    /**
+     * Obtiene un Single del estudiante consultado
+     *
+     * @param id ID del estudiante a consultar
+     * @return Single con DTO de entidad consultada
+     */
+    public Single<StudentDTO> processFindById(final int id) {
+        Optional<Student> opt = service.findById(id);
+        if (opt.isEmpty()) return Single.never();
+
+        StudentDTO dto = StudentHelper.buildDTO(opt.get());
+
+        return Single.create(source -> {
+            try {
                 source.onSuccess(dto);
             } catch (Exception ex) {
                 source.onError(ex);

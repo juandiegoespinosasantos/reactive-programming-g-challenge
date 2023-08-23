@@ -3,7 +3,8 @@ package com.juandiegoespinosasantos.challenges.reactive_programming.services;
 import com.juandiegoespinosasantos.challenges.reactive_programming.models.entities.Student;
 import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Observable;
-import io.reactivex.rxjava3.core.Single;
+
+import java.util.Optional;
 
 /**
  * @author juandiegoespinosasantos@gmail.com
@@ -16,7 +17,7 @@ public interface IStudentService {
 
     Completable edit(Student entity);
 
-    Single<Student> findById(int id);
+    Optional<Student> findById(int id);
 
     Observable<Student> findActives();
 

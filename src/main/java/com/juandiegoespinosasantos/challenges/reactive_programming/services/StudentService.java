@@ -4,7 +4,6 @@ import com.juandiegoespinosasantos.challenges.reactive_programming.models.dao.St
 import com.juandiegoespinosasantos.challenges.reactive_programming.models.entities.Student;
 import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Observable;
-import io.reactivex.rxjava3.core.Single;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -52,15 +51,8 @@ public class StudentService implements IStudentService {
     }
 
     @Override
-    public Single<Student> findById(final int id) {
-        return Single.create(source -> {
-            try {
-                Optional<Student> opt = dao.findById(id);
-                source.onSuccess(opt.orElse(null));
-            } catch (Exception ex) {
-                source.onError(ex);
-            }
-        });
+    public Optional<Student> findById(final int id) {
+        return dao.findById(id);
     }
 
     @Override

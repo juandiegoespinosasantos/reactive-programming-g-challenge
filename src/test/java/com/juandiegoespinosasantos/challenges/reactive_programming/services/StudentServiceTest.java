@@ -11,6 +11,8 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.util.Optional;
+
 /**
  * @author juandiegoespinosasantos@gmail.com
  * @version Aug 19, 2023
@@ -42,5 +44,38 @@ class StudentServiceTest {
         // then
         Assertions.assertNotNull(actual);
         Assertions.assertEquals(expected, actual);
+    }
+
+    @Test
+    void givenExistentEntityWhenFindByIdThenReturnThatResponse() {
+        // given
+        Student expected = StudentTestUtil.getEntityWithAllAttrs();
+        Integer id = expected.getId();
+        Mockito.when(mockDao.findById(id)).thenReturn(Optional.of(expected));
+
+        // when
+        Optional<Student> opt = service.findById(id);
+
+        // then
+        Assertions.assertNotNull(opt);
+        Assertions.assertTrue(opt.isPresent());
+
+        Student actual = opt.get();
+        Assertions.assertNotNull(actual);
+        Assertions.assertEquals(expected, actual);
+    }
+
+    @Test
+    void givenNoExistentEntityWhenFindByIdThenReturnEmpty() {
+        // given
+        Integer id = 1;
+        Mockito.when(mockDao.findById(id)).thenReturn(Optional.empty());
+
+        // when
+        Optional<Student> opt = service.findById(id);
+
+        // then
+        Assertions.assertNotNull(opt);
+        Assertions.assertTrue(opt.isEmpty());
     }
 }
