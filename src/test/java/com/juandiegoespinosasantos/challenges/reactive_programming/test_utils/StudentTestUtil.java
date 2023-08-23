@@ -3,6 +3,9 @@ package com.juandiegoespinosasantos.challenges.reactive_programming.test_utils;
 import com.juandiegoespinosasantos.challenges.reactive_programming.dtos.StudentDTO;
 import com.juandiegoespinosasantos.challenges.reactive_programming.models.entities.Student;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @author juandiegoespinosasantos@gmail.com
  * @version Aug 21, 2023
@@ -108,7 +111,7 @@ public final class StudentTestUtil {
     public static Student getEditedEntity() {
         long now = System.currentTimeMillis();
         java.sql.Timestamp createdAt = new java.sql.Timestamp(now - (60L * 60L * 24L * 7L * 1_000L));
-        java.sql.Timestamp latestUpdate = new java.sql.Timestamp(now - (60L * 60L * 24L * 7L * 1_000L));
+        java.sql.Timestamp latestUpdate = new java.sql.Timestamp(now);
 
         return Student.builder()
                 .id(1)
@@ -120,5 +123,22 @@ public final class StudentTestUtil {
                 .createdAt(createdAt)
                 .latestUpdate(latestUpdate)
                 .build();
+    }
+
+    public static List<Student> getActivesList(final int size) {
+        List<Student> resp = new ArrayList<>();
+        Student s;
+
+        for (int i = 0; i < size; i++) {
+            s = Student.builder()
+                    .id(i)
+                    .names("JOHN")
+                    .surnames("DOE")
+                    .active(true)
+                    .build();
+            resp.add(s);
+        }
+
+        return resp;
     }
 }

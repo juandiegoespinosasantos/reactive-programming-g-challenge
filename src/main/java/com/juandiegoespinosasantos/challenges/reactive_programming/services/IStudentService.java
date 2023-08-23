@@ -2,8 +2,8 @@ package com.juandiegoespinosasantos.challenges.reactive_programming.services;
 
 import com.juandiegoespinosasantos.challenges.reactive_programming.models.entities.Student;
 import io.reactivex.rxjava3.core.Completable;
-import io.reactivex.rxjava3.core.Observable;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -19,7 +19,7 @@ public interface IStudentService {
 
     Optional<Student> findById(int id);
 
-    Observable<Student> findActives();
+    List<Student> findActives();
 
     Completable delete(int id);
 }

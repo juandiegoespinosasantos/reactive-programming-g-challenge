@@ -6,11 +6,13 @@ import com.juandiegoespinosasantos.challenges.reactive_programming.models.entiti
 import com.juandiegoespinosasantos.challenges.reactive_programming.services.IStudentService;
 import com.juandiegoespinosasantos.challenges.reactive_programming.utils.StudentHelper;
 import io.reactivex.rxjava3.core.Completable;
+import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.core.Single;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -91,5 +93,17 @@ public class StudentAdapter {
                 source.onError(ex);
             }
         });
+    }
+
+    /**
+     * Procesa la consulta de todos los estudiantes en estado activo
+     *
+     * @return Observable de los estudiantes consultados
+     */
+    public Observable<StudentDTO> processFindActives() {
+        List<Student> students = service.findActives();
+
+        return Observable.fromIterable(students)
+                .map(StudentHelper::buildDTO);
     }
 }

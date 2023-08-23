@@ -11,6 +11,8 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -92,5 +94,36 @@ class StudentServiceTest {
         // then
         Assertions.assertNotNull(opt);
         Assertions.assertTrue(opt.isEmpty());
+    }
+
+    @Test
+    void givenActiveStudentsWhenFindActivesThenReturnThatResponse() {
+        // given
+        List<Student> expected = StudentTestUtil.getActivesList(10);
+        Mockito.when(mockDao.findByActive(true)).thenReturn(expected);
+
+        // when
+        List<Student> actual = service.findActives();
+
+        // then
+        Assertions.assertNotNull(actual);
+        Assertions.assertFalse(actual.isEmpty());
+
+        for (Student student : actual) {
+            Assertions.assertTrue(student.isActive());
+        }
+    }
+
+    @Test
+    void givenEmptyWhenFindActivesThenReturnThatResponse() {
+        // given
+        Mockito.when(mockDao.findByActive(true)).thenReturn(Collections.emptyList());
+
+        // when
+        List<Student> actual = service.findActives();
+
+        // then
+        Assertions.assertNotNull(actual);
+        Assertions.assertTrue(actual.isEmpty());
     }
 }

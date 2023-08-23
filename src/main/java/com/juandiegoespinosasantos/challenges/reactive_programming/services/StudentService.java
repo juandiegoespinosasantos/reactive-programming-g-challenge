@@ -3,7 +3,6 @@ package com.juandiegoespinosasantos.challenges.reactive_programming.services;
 import com.juandiegoespinosasantos.challenges.reactive_programming.models.dao.StudentDAO;
 import com.juandiegoespinosasantos.challenges.reactive_programming.models.entities.Student;
 import io.reactivex.rxjava3.core.Completable;
-import io.reactivex.rxjava3.core.Observable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -49,10 +48,8 @@ public class StudentService implements IStudentService {
     }
 
     @Override
-    public Observable<Student> findActives() {
-        List<Student> students = dao.findByActive(true);
-
-        return Observable.fromIterable(students);
+    public List<Student> findActives() {
+        return dao.findByActive(true);
     }
 
     @Override
