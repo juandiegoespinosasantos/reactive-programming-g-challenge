@@ -1,10 +1,8 @@
 package com.juandiegoespinosasantos.challenges.reactive_programming.controllers;
 
+import com.juandiegoespinosasantos.challenges.reactive_programming.adapters.StudentAdapter;
 import com.juandiegoespinosasantos.challenges.reactive_programming.dtos.ResponseDTO;
 import com.juandiegoespinosasantos.challenges.reactive_programming.dtos.StudentDTO;
-import com.juandiegoespinosasantos.challenges.reactive_programming.models.entities.Student;
-import com.juandiegoespinosasantos.challenges.reactive_programming.services.IStudentService;
-import com.juandiegoespinosasantos.challenges.reactive_programming.utils.StudentHelper;
 import io.reactivex.rxjava3.core.Single;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,24 +25,20 @@ import org.springframework.web.bind.annotation.RestController;
 @CrossOrigin
 public class StudentController {
 
-    private final IStudentService service;
+    private final StudentAdapter adapter;
 
     @Autowired
-    public StudentController(IStudentService service) {
-        this.service = service;
+    public StudentController(StudentAdapter adapter) {
+        this.adapter = adapter;
     }
 
     @PostMapping(path = "", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public Single<ResponseEntity<ResponseDTO>> create(@RequestBody StudentDTO requestBody) {
-        Student entity = StudentHelper.buildEntity(requestBody);
-
-        return service.create(entity)
+        return adapter.processCreate(requestBody)
                 .subscribeOn(Schedulers.io())
                 .map(single -> {
-                    StudentDTO payload = StudentHelper.buildDTO(single);
-
-                    return ResponseEntity.status(HttpStatus.CREATED)
-                            .body(new ResponseDTO("Estudiante creado exitosamente", payload));
+                    ResponseDTO response = new ResponseDTO("Estudiante creado exitosamente", single);
+                    return ResponseEntity.status(HttpStatus.CREATED).body(response);
                 });
     }
 }

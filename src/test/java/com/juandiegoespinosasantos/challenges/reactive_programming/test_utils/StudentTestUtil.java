@@ -41,4 +41,40 @@ public final class StudentTestUtil {
                 now,
                 now);
     }
+
+    public static StudentDTO getDTOFromCreate() {
+        return new StudentDTO(
+                0,
+                "JOHN",
+                "DOE",
+                "johndoe@example.com",
+                "555-0001",
+                true,
+                0L,
+                0L);
+    }
+
+    public static Student getEntityToCreate() {
+        return Student.builder()
+                .names("JOHN")
+                .surnames("DOE")
+                .email("johndoe@example.com")
+                .phoneNumber("555-0001")
+                .build();
+    }
+
+    public static Student getCreatedEntity() {
+        java.sql.Timestamp now = new java.sql.Timestamp(System.currentTimeMillis());
+
+        return Student.builder()
+                .id(1)
+                .names("JOHN")
+                .surnames("DOE")
+                .email("johndoe@example.com")
+                .phoneNumber("555-0001")
+                .active(true)
+                .createdAt(now)
+                .latestUpdate(now)
+                .build();
+    }
 }

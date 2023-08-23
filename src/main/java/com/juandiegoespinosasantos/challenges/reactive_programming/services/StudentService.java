@@ -27,20 +27,13 @@ public class StudentService implements IStudentService {
     }
 
     @Override
-    public Single<Student> create(Student entity) {
+    public Student create(final Student entity) {
         java.sql.Timestamp now = new java.sql.Timestamp(System.currentTimeMillis());
         entity.setCreatedAt(now);
         entity.setLatestUpdate(now);
         entity.setActive(true);
 
-        return Single.create(source -> {
-            try {
-                Student student = dao.save(entity);
-                source.onSuccess(student);
-            } catch (Exception ex) {
-                source.onError(ex);
-            }
-        });
+        return dao.save(entity);
     }
 
     @Override

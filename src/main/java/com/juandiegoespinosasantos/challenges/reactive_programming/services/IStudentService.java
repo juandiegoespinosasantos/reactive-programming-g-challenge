@@ -12,7 +12,7 @@ import io.reactivex.rxjava3.core.Single;
  */
 public interface IStudentService {
 
-    Single<Student> create(Student entity);
+    Student create(Student entity);
 
     Completable edit(Student entity);
 
