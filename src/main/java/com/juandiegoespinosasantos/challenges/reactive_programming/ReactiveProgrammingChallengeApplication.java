@@ -9,5 +9,4 @@ public class ReactiveProgrammingChallengeApplication {
     public static void main(String[] args) {
         SpringApplication.run(ReactiveProgrammingChallengeApplication.class, args);
     }
-
 }

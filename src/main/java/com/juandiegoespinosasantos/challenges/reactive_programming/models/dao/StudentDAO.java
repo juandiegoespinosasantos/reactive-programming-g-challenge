@@ -4,6 +4,8 @@ import com.juandiegoespinosasantos.challenges.reactive_programming.models.entiti
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 /**
  * @author juandiegoespinosasantos@gmail.com
  * @version Aug 19, 2023
@@ -11,4 +13,6 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface StudentDAO extends CrudRepository<Student, Integer> {
+
+    List<Student> findByActive(boolean active);
 }
