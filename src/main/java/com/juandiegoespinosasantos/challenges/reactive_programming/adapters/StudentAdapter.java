@@ -106,4 +106,21 @@ public class StudentAdapter {
         return Observable.fromIterable(students)
                 .map(StudentHelper::buildDTO);
     }
+
+    /**
+     * Procesa el borrado del estudiante indicado
+     *
+     * @param id ID del estudiante a eliminar
+     * @return Completable confirmando el borrado de la entidad
+     */
+    public Completable processDelete(final int id) {
+        return Completable.create(source -> {
+            try {
+                service.delete(id);
+                source.onComplete();
+            } catch (Exception ex) {
+                source.onError(ex);
+            }
+        });
+    }
 }

@@ -126,4 +126,16 @@ class StudentServiceTest {
         Assertions.assertNotNull(actual);
         Assertions.assertTrue(actual.isEmpty());
     }
+
+    @Test
+    void deleteTest() {
+        // given
+        int id = 1;
+
+        // when
+        service.delete(id);
+
+        // then
+        Mockito.verify(mockDao, Mockito.only()).deleteById(id);
+    }
 }
