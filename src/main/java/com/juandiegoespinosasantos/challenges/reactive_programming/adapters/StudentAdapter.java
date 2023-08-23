@@ -1,11 +1,14 @@
 package com.juandiegoespinosasantos.challenges.reactive_programming.adapters;
 
 import com.juandiegoespinosasantos.challenges.reactive_programming.dtos.StudentDTO;
+import com.juandiegoespinosasantos.challenges.reactive_programming.exceptions.ClientException;
 import com.juandiegoespinosasantos.challenges.reactive_programming.models.entities.Student;
 import com.juandiegoespinosasantos.challenges.reactive_programming.services.IStudentService;
 import com.juandiegoespinosasantos.challenges.reactive_programming.utils.StudentHelper;
+import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Single;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
@@ -39,6 +42,30 @@ public class StudentAdapter {
                 Student created = service.create(student);
                 StudentDTO dto = StudentHelper.buildDTO(created);
                 source.onSuccess(dto);
+            } catch (Exception ex) {
+                source.onError(ex);
+            }
+        });
+    }
+
+    /**
+     * Procesa la actualización del estudiante indicado
+     *
+     * @param id          ID del estudiante a actualizar
+     * @param requestBody Objeto de solicitud
+     * @return Completable confirmando la actualización de la entidad
+     */
+    public Completable processUpdate(final int id, final StudentDTO requestBody) {
+        Optional<Student> opt = service.findById(id);
+
+        if (opt.isEmpty()) {
+            return Completable.error(new ClientException(HttpStatus.NOT_FOUND, "Estudiante [" + id + "] no registrado"));
+        }
+
+        return Completable.create(source -> {
+            try {
+                service.edit(opt.get());
+                source.onComplete();
             } catch (Exception ex) {
                 source.onError(ex);
             }

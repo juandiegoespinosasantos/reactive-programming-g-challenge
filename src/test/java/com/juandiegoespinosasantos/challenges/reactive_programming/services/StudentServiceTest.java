@@ -47,6 +47,21 @@ class StudentServiceTest {
     }
 
     @Test
+    void editTest() {
+        // given
+        Student entity = StudentTestUtil.getEntityToEdit();
+        Student expected = StudentTestUtil.getEditedEntity();
+        Mockito.when(mockDao.save(entity)).thenReturn(expected);
+
+        // when
+        Student actual = service.edit(entity);
+
+        // then
+        Assertions.assertNotNull(actual);
+        Assertions.assertEquals(expected, actual);
+    }
+
+    @Test
     void givenExistentEntityWhenFindByIdThenReturnThatResponse() {
         // given
         Student expected = StudentTestUtil.getEntityWithAllAttrs();

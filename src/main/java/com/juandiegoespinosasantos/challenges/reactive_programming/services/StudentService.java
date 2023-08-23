@@ -36,18 +36,11 @@ public class StudentService implements IStudentService {
     }
 
     @Override
-    public Completable edit(final Student entity) {
+    public Student edit(final Student entity) {
         java.sql.Timestamp now = new java.sql.Timestamp(System.currentTimeMillis());
         entity.setLatestUpdate(now);
 
-        return Completable.create(source -> {
-            try {
-                dao.save(entity);
-                source.onComplete();
-            } catch (Exception ex) {
-                source.onError(ex);
-            }
-        });
+        return dao.save(entity);
     }
 
     @Override

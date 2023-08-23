@@ -15,7 +15,7 @@ public interface IStudentService {
 
     Student create(Student entity);
 
-    Completable edit(Student entity);
+    Student edit(Student entity);
 
     Optional<Student> findById(int id);
 

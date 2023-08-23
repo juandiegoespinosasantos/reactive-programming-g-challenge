@@ -77,4 +77,48 @@ public final class StudentTestUtil {
                 .latestUpdate(now)
                 .build();
     }
+
+    public static StudentDTO getDTOToEdit() {
+        return new StudentDTO(
+                1,
+                "JOHN B.",
+                "DOE",
+                "jdoe@example.com",
+                "555-0003",
+                true,
+                0L,
+                0L);
+    }
+
+    public static Student getEntityToEdit() {
+        long now = System.currentTimeMillis();
+        java.sql.Timestamp createdAt = new java.sql.Timestamp(now - (60L * 60L * 24L * 7L * 1_000L));
+
+        return Student.builder()
+                .id(1)
+                .names("JOHN B.")
+                .surnames("DOE")
+                .email("jdoe@example.com")
+                .phoneNumber("555-0003")
+                .active(true)
+                .createdAt(createdAt)
+                .build();
+    }
+
+    public static Student getEditedEntity() {
+        long now = System.currentTimeMillis();
+        java.sql.Timestamp createdAt = new java.sql.Timestamp(now - (60L * 60L * 24L * 7L * 1_000L));
+        java.sql.Timestamp latestUpdate = new java.sql.Timestamp(now - (60L * 60L * 24L * 7L * 1_000L));
+
+        return Student.builder()
+                .id(1)
+                .names("JOHN B.")
+                .surnames("DOE")
+                .email("jdoe@example.com")
+                .phoneNumber("555-0003")
+                .active(true)
+                .createdAt(createdAt)
+                .latestUpdate(latestUpdate)
+                .build();
+    }
 }
