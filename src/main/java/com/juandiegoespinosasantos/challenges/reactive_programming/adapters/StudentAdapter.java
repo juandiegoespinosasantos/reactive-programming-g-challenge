@@ -1,15 +1,18 @@
 package com.juandiegoespinosasantos.challenges.reactive_programming.adapters;
 
 import com.juandiegoespinosasantos.challenges.reactive_programming.dtos.StudentDTO;
-import com.juandiegoespinosasantos.challenges.reactive_programming.exceptions.ClientException;
 import com.juandiegoespinosasantos.challenges.reactive_programming.models.entities.Student;
 import com.juandiegoespinosasantos.challenges.reactive_programming.services.IStudentService;
+import com.juandiegoespinosasantos.challenges.reactive_programming.use_cases.CreateStudentUseCase;
+import com.juandiegoespinosasantos.challenges.reactive_programming.use_cases.DeleteStudentUseCase;
+import com.juandiegoespinosasantos.challenges.reactive_programming.use_cases.GetActiveStudentUseCase;
+import com.juandiegoespinosasantos.challenges.reactive_programming.use_cases.GetStudentUseCase;
+import com.juandiegoespinosasantos.challenges.reactive_programming.use_cases.UpdateStudentUseCase;
 import com.juandiegoespinosasantos.challenges.reactive_programming.utils.StudentHelper;
 import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.core.Single;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -37,11 +40,9 @@ public class StudentAdapter {
      * @return Single con DTO de la entidad creada
      */
     public Single<StudentDTO> processCreate(final StudentDTO requestBody) {
-        Student student = StudentHelper.buildEntity(requestBody);
-
         return Single.create(source -> {
             try {
-                Student created = service.create(student);
+                Student created = new CreateStudentUseCase(service, requestBody).execute();
                 StudentDTO dto = StudentHelper.buildDTO(created);
                 source.onSuccess(dto);
             } catch (Exception ex) {
@@ -58,15 +59,9 @@ public class StudentAdapter {
      * @return Completable confirmando la actualización de la entidad
      */
     public Completable processUpdate(final int id, final StudentDTO requestBody) {
-        Optional<Student> opt = service.findById(id);
-
-        if (opt.isEmpty()) {
-            return Completable.error(new ClientException(HttpStatus.NOT_FOUND, "Estudiante [" + id + "] no registrado"));
-        }
-
         return Completable.create(source -> {
             try {
-                service.edit(opt.get());
+                new UpdateStudentUseCase(service, id, requestBody).execute();
                 source.onComplete();
             } catch (Exception ex) {
                 source.onError(ex);
@@ -81,13 +76,12 @@ public class StudentAdapter {
      * @return Single con DTO de entidad consultada
      */
     public Single<StudentDTO> processFindById(final int id) {
-        Optional<Student> opt = service.findById(id);
+        Optional<Student> opt = new GetStudentUseCase(service, id).execute();
         if (opt.isEmpty()) return Single.never();
-
-        StudentDTO dto = StudentHelper.buildDTO(opt.get());
 
         return Single.create(source -> {
             try {
+                StudentDTO dto = StudentHelper.buildDTO(opt.get());
                 source.onSuccess(dto);
             } catch (Exception ex) {
                 source.onError(ex);
@@ -101,7 +95,7 @@ public class StudentAdapter {
      * @return Observable de los estudiantes consultados
      */
     public Observable<StudentDTO> processFindActives() {
-        List<Student> students = service.findActives();
+        List<Student> students = new GetActiveStudentUseCase(service).execute();
 
         return Observable.fromIterable(students)
                 .map(StudentHelper::buildDTO);
@@ -116,7 +110,7 @@ public class StudentAdapter {
     public Completable processDelete(final int id) {
         return Completable.create(source -> {
             try {
-                service.delete(id);
+                new DeleteStudentUseCase(service, id).execute();
                 source.onComplete();
             } catch (Exception ex) {
                 source.onError(ex);
