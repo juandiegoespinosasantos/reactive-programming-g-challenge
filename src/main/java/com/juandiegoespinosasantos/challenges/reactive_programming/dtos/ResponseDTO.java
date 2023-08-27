@@ -6,4 +6,8 @@ package com.juandiegoespinosasantos.challenges.reactive_programming.dtos;
  * @since 17
  */
 public record ResponseDTO(String message, Object payload) {
+
+    public ResponseDTO(String message) {
+        this(message, null);
+    }
 }
