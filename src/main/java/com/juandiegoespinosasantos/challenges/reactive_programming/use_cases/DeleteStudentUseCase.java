@@ -1,6 +1,6 @@
 package com.juandiegoespinosasantos.challenges.reactive_programming.use_cases;
 
-import com.juandiegoespinosasantos.challenges.reactive_programming.exceptions.ClientException;
+import com.juandiegoespinosasantos.challenges.reactive_programming.exceptions.StudentException;
 import com.juandiegoespinosasantos.challenges.reactive_programming.models.entities.Student;
 import com.juandiegoespinosasantos.challenges.reactive_programming.services.IStudentService;
 import org.springframework.http.HttpStatus;
@@ -27,7 +27,7 @@ public class DeleteStudentUseCase extends AbstractUseCase<Student> {
     @Override
     protected void validate() throws Exception {
         Optional<Student> opt = service.findById(id);
-        if (opt.isEmpty()) throw new ClientException(HttpStatus.NOT_FOUND, "Estudiante [" + id + "] no registrado");
+        if (opt.isEmpty()) throw new StudentException(HttpStatus.NOT_FOUND, "Estudiante [" + id + "] no registrado");
         student = opt.get();
     }
 

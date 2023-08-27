@@ -1,7 +1,7 @@
 package com.juandiegoespinosasantos.challenges.reactive_programming.use_cases;
 
 import com.juandiegoespinosasantos.challenges.reactive_programming.dtos.StudentDTO;
-import com.juandiegoespinosasantos.challenges.reactive_programming.exceptions.ClientException;
+import com.juandiegoespinosasantos.challenges.reactive_programming.exceptions.StudentException;
 import com.juandiegoespinosasantos.challenges.reactive_programming.models.entities.Student;
 import com.juandiegoespinosasantos.challenges.reactive_programming.services.IStudentService;
 import com.juandiegoespinosasantos.challenges.reactive_programming.utils.StudentHelper;
@@ -35,7 +35,7 @@ public class UpdateStudentUseCase extends AbstractUseCase<Student> {
         Optional<Student> opt = service.findById(id);
 
         if (opt.isEmpty()) {
-            throw new ClientException(HttpStatus.NOT_FOUND, "Estudiante [" + id + "] no registrado");
+            throw new StudentException(HttpStatus.NOT_FOUND, "Estudiante [" + id + "] no registrado");
         }
 
         pivot = opt.get();

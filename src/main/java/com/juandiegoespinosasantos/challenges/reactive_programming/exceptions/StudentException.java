@@ -1,5 +1,6 @@
 package com.juandiegoespinosasantos.challenges.reactive_programming.exceptions;
 
+import lombok.Data;
 import org.springframework.http.HttpStatus;
 
 /**
@@ -7,12 +8,13 @@ import org.springframework.http.HttpStatus;
  * @version Aug 22, 2023
  * @since 17
  */
-public class ClientException extends Exception {
+@Data
+public class StudentException extends Exception {
 
     private HttpStatus httpStatus;
     private String message;
 
-    public ClientException(HttpStatus httpStatus, String message) {
+    public StudentException(HttpStatus httpStatus, String message) {
         super(message);
         this.httpStatus = httpStatus;
     }
